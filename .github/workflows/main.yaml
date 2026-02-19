@@ -10,6 +10,7 @@ on:
     branches:
       - main
       - master
+  workflow_dispatch: # 新增此行，允許手動觸發
 
 jobs:
   test:
