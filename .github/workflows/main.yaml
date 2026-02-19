@@ -1,0 +1,38 @@
+name: Unit_test
+run-name: ${{ github.actor }} is testing the branch ${{ github.ref_name }}
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run kcov via Docker
+        run: |
+          chmod +x kcov.sh
+          ./kcov.sh
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+
+      # This work is only used in public repository
+      - name: Deploy to Github Pages
+        uses: peaceiris/action-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./coverage
