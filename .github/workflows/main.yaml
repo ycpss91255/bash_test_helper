@@ -33,7 +33,7 @@ jobs:
 
       # This work is only used in public repository
       - name: Deploy to Github Pages
-        uses: peaceiris/action-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./coverage
