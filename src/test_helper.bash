@@ -40,6 +40,7 @@ fi
 set_default "BATS_CUSTOM_LIB_PATH" "${BATS_TEST_DIRNAME}/lib"
 for file in "${BATS_CUSTOM_LIB_PATH}/"*.sh; do
 	if [ -f "${file}" ]; then
+		# shellcheck disable=SC1090
 		source "${file}"
 	fi
 done

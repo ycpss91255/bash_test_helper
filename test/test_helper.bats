@@ -5,6 +5,7 @@ setup() {
 
 	TEST_SCRIPT_PATH="${BATS_TEST_DIRNAME}/${relative_test_script_path}"
 	TEST_SCRIPT_PATH="$(realpath "${TEST_SCRIPT_PATH}")"
+	# shellcheck disable=SC1090
 	source "${TEST_SCRIPT_PATH}"
 }
 
@@ -38,6 +39,7 @@ setup() {
 	[ "${var}" = "already_set" ]
 
 	set_default "undeclared_var" "success"
+	# shellcheck disable=SC2154
 	[ "${undeclared_var}" = "success" ]
 }
 
@@ -64,6 +66,7 @@ setup() {
 	echo 'TEST_MARKER="SUCCESS"' > "${custom_lib_path}/verify_load.sh"
 
 	# source the test helper again to load the new library
+	# shellcheck disable=SC1090
 	source "${TEST_SCRIPT_PATH}"
 	[ "${TEST_MARKER}" = "SUCCESS" ]
 
