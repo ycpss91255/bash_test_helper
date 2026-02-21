@@ -9,9 +9,6 @@ on:
     tags:
       - 'v*'
   pull_request:
-    branches:
-      - main
-      - master
   workflow_dispatch:
 
 jobs:
