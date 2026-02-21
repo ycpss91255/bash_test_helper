@@ -2,9 +2,6 @@ name: Reusable Test Worker
 
 on:
   workflow_call:
-    secrets:
-      CODECOV_TOKEN:
-        required: true # 如果未來你想用 Codecov，這裡要設定為 true
   workflow_dispatch:
 
 jobs:
@@ -14,10 +11,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run kcov via Docker
+      - name: Run CI (Lint & Test) via Docker
         run: |
-          chmod +x kcov.sh
-          ./kcov.sh
+          chmod +x ci.sh
+          ./ci.sh
 
       - name: Show Coverage Summary in Log
         run: |

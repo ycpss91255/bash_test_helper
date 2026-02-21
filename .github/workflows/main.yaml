@@ -1,21 +1,27 @@
-name: Main CI Controller
-run-name: ${{ github.actor }} triggered CI on ${{ github.ref_name }}
+name: Main CI/CD Pipeline
+run-name: ${{ github.actor }} triggered CI/CD on ${{ github.ref_name }}
 
 on:
   push:
     branches:
       - main
       - master
+    tags:
+      - 'v*'
   pull_request:
-    branches:
-      - main
-      - master
   workflow_dispatch:
 
 jobs:
-  # 呼叫測試工廠
   call-unit-test:
     uses: ./.github/workflows/test-worker.yaml
     secrets:
-      # 將本專案的 Secret 傳遞給被呼叫的子工作流
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  # 階段二：CD (持續交付) - 自動發布
+  # 條件：1. CI 必須成功 (needs)
+  #       2. 必須是推送 tag (startsWith)
+  call-release:
+    needs: call-unit-test
+    if: startsWith(github.ref, 'refs/tags/')
+    uses: ./.github/workflows/release-worker.yaml
+    secrets: inherit
