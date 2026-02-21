@@ -14,8 +14,7 @@ on:
 jobs:
   call-unit-test:
     uses: ./.github/workflows/test-worker.yaml
-    secrets:
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    secrets: inherit
 
   # 階段二：CD (持續交付) - 自動發布
   # 條件：1. CI 必須成功 (needs)
