@@ -8,28 +8,33 @@ jobs:
   create-release:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # 建立 Release 需要寫入權限
+      contents: write
+    env:
+      RELEASE_FILES: >
+        src/
+        LICENSE
+        README.md
+        README.zh-TW.md
+        ci.sh
+        docker-compose.yaml
+        cov-tui.py
+      VERSION: "${{ github.ref_name }}"
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Package project
         run: |
-          # 建立一個壓縮檔，包含 src, LICENSE, READMEs 以及工具腳本
-          tar -czvf bats-helper-bundle.tar.gz \
-            src/ \
-            LICENSE \
-            README.md \
-            README.zh-TW.md \
-            ci.sh \
-            docker-compose.yaml \
-            cov-tui.py
+          tar -czvf bats-helper-${VERSION}.tar.gz ${RELEASE_FILES}
+          zip -r bats-helper-${VERSION}.zip ${RELEASE_FILES}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: bats-helper-bundle.tar.gz
+          files: |
+            bats-helper-${{ github.ref_name }}.tar.gz
+            bats-helper-${{ github.ref_name }}.zip
           # 自動生成 Release Note (從 Commit 紀錄)
           generate_release_notes: true
-          # 如果是測試版，可以標記為 Pre-release
-          prerelease: false
+          prerelease: "${{ contains(github.ref_name, '-') }}"
